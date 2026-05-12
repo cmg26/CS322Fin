@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>FutureSelf - Stories</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+
+   <p><a href="index.html">Back to Home</a></p>
+
+   <h1>Stories</h1>
+   <p>Read what others experienced when they received their letter. Share your own once yours arrives.</p>
+
+   <hr>
+
+   <h2>Share your story</h2>
+
+   <p id="msg"></p>
+
+   <div id="storyFormWrap">
+      <!-- Populated by JS depending on login state -->
+   </div>
+
+   <hr>
+
+   <h2>From the community</h2>
+   <div id="storiesList"><p>Loading stories...</p></div>
+
+   <script>
+     const params = new URLSearchParams(window.location.search);
+     const msg = document.getElementById('msg');
+     if (params.get('error')) { msg.style.color = 'red'; msg.textContent = params.get('error'); }
+     if (params.get('success')) { msg.style.color = 'green'; msg.textContent = params.get('success'); }
+
+     // Check login state and render form accordingly
+     fetch('/api/me')
+       .then(r => r.json())
+       .then(data => {
+         const wrap = document.getElementById('storyFormWrap');
+         if (!data.loggedIn) {
+           wrap.innerHTML = '<p>You must be <a href="login.html">logged in</a> and have received a letter to share your story.</p>';
+           return;
+         }
+         wrap.innerHTML = `
+           <p>Logged in as <strong>${data.fullName}</strong>. You can share a story once you have received a letter.</p>
+           <form action="/story" method="POST">
+
+             <div>
+               <label for="feedback">Your experience:</label><br>
+               <textarea id="feedback" name="feedback" rows="5" cols="60"
+                 placeholder="When I received my letter, I..." required></textarea>
+             </div>
+
+             <br>
+
+             <div>
+               <label for="excerpt">Share an excerpt from your letter (optional):</label><br>
+               <textarea id="excerpt" name="excerpt" rows="4" cols="60"
+                 placeholder="Dear future me..."></textarea>
+             </div>
+
+             <br>
+
+             <div>
+               <label>Visibility:</label><br>
+               <input type="radio" id="public" name="visibility" value="public" checked>
+               <label for="public">Public: show my story on this page</label><br>
+               <input type="radio" id="private" name="visibility" value="private">
+               <label for="private">Private: only visible to FutureSelf</label>
+             </div>
+
+             <br>
+
+             <div>
+               <input type="submit" value="Submit Story">
+             </div>
+
+           </form>
+         `;
+       });
+
+     // Load public stories
+     fetch('/api/stories')
+       .then(r => r.json())
+       .then(stories => {
+         const el = document.getElementById('storiesList');
+         if (stories.length === 0) {
+           el.innerHTML = '<p>No stories yet. Be the first to share!</p>';
+           return;
+         }
+         el.innerHTML = stories.map(s => `
+           <div>
+             <h3>${s.fullName || 'Anonymous'}</h3>
+             <p><em>${s.createdAt.split('T')[0]}</em></p>
+             <p>${s.feedback}</p>
+             ${s.excerpt ? `<blockquote><em>"${s.excerpt}"</em></blockquote>` : ''}
+             <hr>
+           </div>
+         `).join('');
+       });
+   </script>
+</div>
+</body>
+</html>

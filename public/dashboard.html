@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>FutureSelf - My Letters</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+
+   <p><a href="index.html">Home</a></p>
+
+   <h1>My Letters</h1>
+
+   <p id="msg"></p>
+
+   <div id="notLoggedIn" style="display:none">
+      <p>You must be logged in to view your letters</p>
+      <p><a href="login.html">Log in</a></p>
+   </div>
+
+   <div id="dashboard" style="display:none">
+      <p>Welcome back, <strong id="userName"></strong>.
+         <form action="/logout" method="POST" style="display:inline">
+            <button type="submit">Log out</button>
+         </form>
+      </p>
+
+      <p><a href="write.html">Write a new letter</a></p>
+
+      <hr>
+
+      <h2>Scheduled</h2>
+      <div id="scheduledList"><p>No scheduled letters</p></div>
+
+      <hr>
+
+      <h2>Delivered</h2>
+      <div id="deliveredList"><p>No delivered letters yet</p></div>
+   </div>
+
+   <script>
+     const params = new URLSearchParams(window.location.search);
+     const msg = document.getElementById('msg');
+     if (params.get('error')) { msg.style.color = 'red'; msg.textContent = params.get('error'); }
+     if (params.get('success')) { msg.style.color = 'green'; msg.textContent = params.get('success'); }
+
+     fetch('/api/dashboard')
+       .then(r => {
+         if (r.status === 302 || r.redirected) {
+           window.location.href = '/login.html?error=Please+log+in+first.';
+           return null;
+         }
+         return r.json();
+       })
+       .then(data => {
+         if (!data) return;
+
+         document.getElementById('notLoggedIn').style.display = 'none';
+         document.getElementById('dashboard').style.display = 'block';
+         document.getElementById('userName').textContent = data.user.fullName;
+
+         const scheduled = data.letters.filter(l => !l.sent);
+         const delivered = data.letters.filter(l => l.sent);
+
+         const scheduledEl = document.getElementById('scheduledList');
+         if (scheduled.length > 0) {
+           scheduledEl.innerHTML = scheduled.map(l => `
+             <div>
+               <p><strong>Delivers on:</strong> ${l.deliverDate}</p>
+               <p><strong>Written on:</strong> ${l.createdAt.split('T')[0]}</p>
+               <p><strong>Preview:</strong> ${l.message.slice(0, 80)}${l.message.length > 80 ? '...' : ''}</p>
+               <hr>
+             </div>
+           `).join('');
+         }
+
+         const deliveredEl = document.getElementById('deliveredList');
+         if (delivered.length > 0) {
+           deliveredEl.innerHTML = delivered.map(l => `
+             <div>
+               <p><strong>Delivered:</strong> ${l.deliverDate}</p>
+               <p><strong>Written on:</strong> ${l.createdAt.split('T')[0]}</p>
+               <p>${l.message.replace(/\n/g, '<br>')}</p>
+               <hr>
+             </div>
+           `).join('');
+         }
+       })
+       .catch(() => {
+         document.getElementById('notLoggedIn').style.display = 'block';
+       });
+   </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>FutureSelf - Home</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+
+   <h1>FutureSelf</h1>
+   <p id="navUser"></p>
+   <hr>
+
+   <p>Write a letter to who you'll be. We'll deliver it to your inbox on the date you choose.</p>
+
+   <h2>How it works</h2>
+   <ol>
+      <li>Create an account and verify your email.</li>
+      <li>Write a message to your future self.</li>
+      <li>Pick any delivery date.</li>
+      <li>We email it to you when that day arrives.</li>
+      <li>Once you've received your letter, share your story with others.</li>
+   </ol>
+
+   <hr>
+
+   <h2>Get started</h2>
+   <p><a href="register.html">Create an account</a></p>
+   <p><a href="login.html">Log in</a></p>
+
+   <hr>
+
+   <h2>Explore</h2>
+   <p><a href="write.html">Write a letter</a></p>
+   <p><a href="stories.html">Read stories from other users</a></p>
+   <p><a href="dashboard.html">My letters</a></p>
+
+   <script>
+     fetch('/api/me')
+       .then(r => r.json())
+       .then(data => {
+         const el = document.getElementById('navUser');
+         if (data.loggedIn) {
+           el.innerHTML = 'Logged in as <strong>' + data.fullName + '</strong> (' + data.email + ') — '
+             + '<form action="/logout" method="POST" style="display:inline"><button type="submit">Log out</button></form>';
+         } else {
+           el.innerHTML = '<a href="login.html">Log in</a> or <a href="register.html">create an account</a>';
+         }
+       });
+   </script>
+
+</div>
+</body>
+</html>

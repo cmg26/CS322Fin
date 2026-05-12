@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>FutureSelf - Write a Letter</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+   <div class="container">
+
+   <p><a href="index.html">Back to Home</a></p>
+
+   <h1>Write a Letter to Your Future Self</h1>
+   <p>Your message will be emailed to you on the date you choose.</p>
+
+   <p id="msg"></p>
+
+   <div id="notLoggedIn" style="display:none">
+      <p>You must be logged in to write a letter.</p>
+      <p><a href="login.html">Log in</a> or <a href="register.html">create an account</a>.</p>
+   </div>
+
+   <div id="formWrap">
+      <p>Logged in as: <strong id="userLabel"></strong></p>
+
+      <form action="/submit" method="POST">
+
+         <div>
+            <label for="deliverDate">Deliver on:</label>
+            <input type="date" id="deliverDate" name="deliverDate" required>
+         </div>
+
+         <br>
+
+         <div>
+            <label for="message">Your message:</label><br>
+            <textarea id="message" name="message" rows="12" cols="60" placeholder="Dear future me..." required></textarea>
+         </div>
+
+         <br>
+
+         <div>
+            <input type="submit" value="Schedule Letter">
+         </div>
+
+      </form>
+   </div>
+
+   <script>
+     // Show error/success from redirect
+     const params = new URLSearchParams(window.location.search);
+     const msg = document.getElementById('msg');
+     if (params.get('error')) { msg.style.color = 'red'; msg.textContent = params.get('error'); }
+     if (params.get('success')) { msg.style.color = 'green'; msg.textContent = params.get('success'); }
+
+     // Set minimum date to tomorrow
+     const tomorrow = new Date();
+     tomorrow.setDate(tomorrow.getDate() + 1);
+     document.getElementById('deliverDate').min = tomorrow.toISOString().split('T')[0];
+
+     // Check login state
+     fetch('/api/me')
+       .then(r => r.json())
+       .then(data => {
+         if (!data.loggedIn) {
+           document.getElementById('formWrap').style.display = 'none';
+           document.getElementById('notLoggedIn').style.display = 'block';
+         } else {
+           document.getElementById('userLabel').textContent = data.fullName + ' (' + data.email + ')';
+         }
+       });
+   </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+/* === Reset & Base === */
+* {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   font-family: Georgia, serif;
+   background-color: #f5f0eb;
+   color: #2c2c2c;
+   padding: 40px 20px;
+}
+
+/* === Layout === */
+.container {
+   max-width: 680px;
+   margin: 0 auto;
+}
+
+/* === Typography === */
+h1 {
+   font-size: 2.2rem;
+   margin-bottom: 10px;
+   color: #1a1a1a;
+}
+
+h2 {
+   font-size: 1.3rem;
+   margin-bottom: 8px;
+   color: #333;
+}
+
+h3 {
+   font-size: 1.1rem;
+   margin-bottom: 4px;
+}
+
+p {
+   margin-bottom: 12px;
+   line-height: 1.7;
+}
+
+/* === Links === */
+a {
+   color: #5a7a6b;
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+}
+
+/* === Nav / Back link === */
+.back-link {
+   display: inline-block;
+   margin-bottom: 20px;
+   font-size: 0.9rem;
+   color: #888;
+}
+
+/* === Dividers === */
+hr {
+   border: none;
+   border-top: 1px solid #ddd;
+   margin: 30px 0;
+}
+
+/* === Forms === */
+form div {
+   margin-bottom: 18px;
+}
+
+label {
+   display: block;
+   margin-bottom: 5px;
+   font-size: 0.95rem;
+   font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+   width: auto;
+   min-width: 320px;
+   padding: 10px 12px;
+   border: 1px solid #ccc;
+   border-radius: 6px;
+   font-family: Georgia, serif;
+   font-size: 0.95rem;
+   background-color: #fff;
+   color: #2c2c2c;
+}
+
+textarea {
+   resize: vertical;
+}
+
+input[type="submit"] {
+   background-color: #5a7a6b;
+   color: white;
+   border: none;
+   padding: 12px 28px;
+   border-radius: 6px;
+   font-size: 1rem;
+   cursor: pointer;
+}
+
+input[type="submit"]:hover {
+   background-color: #496658;
+}
+
+/* === Checkbox row === */
+input[type="checkbox"] {
+   margin-right: 8px;
+}
+
+.checkbox-label {
+   display: flex;
+   align-items: flex-start;
+   gap: 8px;
+   font-weight: normal;
+}
+
+/* === Story cards === */
+.story-card {
+   margin-bottom: 10px;
+}
+
+.story-card em {
+   display: block;
+   margin-bottom: 6px;
+   color: #444;
+   font-style: italic;
+}
+
+.story-card p {
+   font-size: 0.9rem;
+   color: #666;
+}
+
+/* === Ordered list (How it works) === */
+ol {
+   padding-left: 20px;
+   line-height: 2;
+}

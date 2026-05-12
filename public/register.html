@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>FutureSelf - Create an Account</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+   <div class="container">
+
+   <p><a href="index.html">Back to Home</a></p>
+
+   <h1>Create an Account</h1>
+   <p>Register with your email to write letters and share your story once you've received one.</p>
+
+   <p id="msg" style="color:red"></p>
+
+   <form action="/register" method="POST">
+
+      <div>
+         <label for="fullName">Full name:</label>
+         <input type="text" id="fullName" name="fullName" required>
+      </div>
+
+      <br>
+
+      <div>
+         <label for="email">Email address:</label>
+         <input type="email" id="email" name="email" required>
+      </div>
+
+      <br>
+
+      <div>
+         <label for="password">Password (min 8 characters):</label>
+         <input type="password" id="password" name="password" required>
+      </div>
+
+      <br>
+
+      <div>
+         <label for="confirmPassword">Confirm password:</label>
+         <input type="password" id="confirmPassword" name="confirmPassword" required>
+      </div>
+
+      <br>
+
+      <div>
+         <input type="checkbox" id="terms" name="terms" required>
+         <label for="terms">I agree that FutureSelf may email me on my chosen delivery date.</label>
+      </div>
+
+      <br>
+
+      <div>
+         <input type="submit" value="Create Account">
+      </div>
+
+   </form>
+
+   <p>Already have an account? <a href="login.html">Log in here.</a></p>
+
+   <script>
+     const params = new URLSearchParams(window.location.search);
+     const msg = document.getElementById('msg');
+     if (params.get('error')) { msg.style.color = 'red'; msg.textContent = params.get('error'); }
+     if (params.get('success')) { msg.style.color = 'green'; msg.textContent = params.get('success'); }
+   </script>
+</div>
+</body>
+</html>
